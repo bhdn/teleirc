@@ -48,18 +48,15 @@ telegram.stdout.on('data', function(data) {
         }
     }
 });
-telegram.stdin.write('chat_with_peer ' + config.tgchat + '\n');
 
 var ircServer;
 
+var telegramMessage = function(msg) {
+    telegram.stdin.write('msg ' + config.tgchat.replace('#', '@') + ' ' + msg + '\n');
+};
+
 var recvdIrcMsg = function(serverName, cmd, chan, nick, msgString, noBroadcast) {
-    // check if first word contains config.nick, ie. is a hilight
-    var firstWord = msgString.substr(0, msgString.indexOf(' '));
-    if(firstWord.indexOf(config.nick) !== -1) {
-        // remove first word
-        msgString = msgString.substr(msgString.indexOf(' ') + 1);
-        telegram.stdin.write('irc: <' + nick + '>: ' + msgString + '\n');
-    }
+    telegramMessage('irc: <' + nick + '>: ' + msgString);
 };
 
 var sendIrcMsg = function(msg) {
