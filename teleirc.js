@@ -42,7 +42,7 @@ telegram.stdout.on('data', function(data) {
 
         for(var i = 0; i < recvdLines.length; i++) {
             if(recvdLines[i] !== '') {
-                //console.log('irc server sent ' + recvdLines[i]);
+                console.log('irc server sent ' + recvdLines[i]);
                 handleTgLine(recvdLines[i]);
             }
         }
@@ -66,7 +66,7 @@ var sendIrcMsg = function(msg) {
 var handleIrcLine = function(line, server, ircServer) {
     var tokens = line.split(' ');
 
-    //console.log(server.name + ': ' + line);
+    console.log(server.name + ': ' + line);
     if(tokens[0] === "PING") {
         //console.log('got PING, sending PONG to ' + tokens[1].substr(1));
         ircServer.send("PONG " + tokens[1].substr(1));
@@ -120,7 +120,7 @@ var ircConnect = function(serverConfig) {
     });
 
     ircServer.send = function(data) {
-        //console.log("sending data to IRC: " + data);
+        console.log("sending data to IRC: " + data);
         ircServer.write(data + '\r\n');
     };
 
@@ -137,7 +137,7 @@ var ircConnect = function(serverConfig) {
 
             for(var i = 0; i < recvdLines.length; i++) {
                 if(recvdLines[i] !== '') {
-                    //console.log('irc server sent ' + recvdLines[i]);
+                    console.log('irc server sent ' + recvdLines[i]);
                     handleIrcLine(recvdLines[i], serverConfig, ircServer);
                 }
             }
