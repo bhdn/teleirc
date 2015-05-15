@@ -98,10 +98,7 @@ var handleIrcLine = function(line, server, ircServer) {
 var ircConnect = function(serverConfig) {
     var buffer = "";
 
-    ircServer = net.connect({
-        "port": serverConfig.port,
-        "host": serverConfig.address
-    }, function() {
+    var listener = function() {
         // logging
         console.log('connected to irc server');
 
@@ -117,7 +114,17 @@ var ircConnect = function(serverConfig) {
                      "JOIN " + config.chan + "\r\n");
 
         ircServer.resetPingTimer();
-    });
+    };
+
+    if (process.version.indexOf("v0.6") === 0) {
+        ircServer = net.connect(serverConfig.port, serverConfig.address,
+                        listener);
+    } else {
+            ircServer = net.connect({
+                "port": serverConfig.port,
+                "host": serverConfig.address
+            }, listener);
+    }
 
     ircServer.send = function(data) {
         console.log("sending data to IRC: " + data);
