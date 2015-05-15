@@ -80,13 +80,15 @@ var handleIrcLine = function(line, server, ircServer) {
         var chanLongName = server.name + ':' + chan;
         chanLongName = chanLongName.toLowerCase();
 
-        if(cmd === "PRIVMSG") {
-            tokens.shift(); tokens.shift(); tokens.shift();
-            var msg = tokens.join(' ').substr(1);
+        tokens.shift(); tokens.shift(); tokens.shift();
+        var msg = tokens.join(' ').substr(1);
 
+        if(cmd === "PRIVMSG") {
             if(chan.toLowerCase() === config.chan.toLowerCase()) {
                 recvdIrcMsg(server.name, "message", chan, nick, msg);
             }
+        } else if (cmd == "TOPIC") {
+            telegramMessage('irc: topic: ' + msg);
         }
     } else {
         console.log("got unknown msg on " + server.name + ": " + line);
